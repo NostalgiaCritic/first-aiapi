@@ -68,7 +68,7 @@
   </header>
 
   <h2>정보성 챗봇 서비스</h2>
-  <form id="chat" action="http://localhost:3000/chatinfo" method="post">
+  <form id="chat" action="https://port-0-first-aiapi-7xwyjq992lljh77hvc.sel4.cloudtype.app/chatinfo" method="post">
     <label>
       <span>채팅</span>
       <input type="text" id="message" name="message">
@@ -94,7 +94,7 @@
         newQues.textContent = `나 : ${reqValue}`
         target.appendChild(newQues)
 
-        fetch('http://localhost:3000/chatinfo', {
+        fetch('https://port-0-first-aiapi-7xwyjq992lljh77hvc.sel4.cloudtype.app/chatinfo', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
