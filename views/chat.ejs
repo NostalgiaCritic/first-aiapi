@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+  <title>Translation Service</title>
+  <style>
+    h1 {
+      margin: 0;
+    }
+    header {
+      width: 100%;
+      padding: 1rem 0;
+    }
+    header nav {
+      display: flex;
+      align-items: center;
+    }
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 30px;
+      font-weight: 700;
+      color: black;
+      transition: 0.5s;
+      margin: 0 2rem;
+      border: 2px solid #000000;
+      text-decoration: none;
+    }
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 16px;
+      color: black;
+      transition: 0.5s;
+    }
+    form {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-content: space-between;
+    }
+
+    form label {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .success {
+      border: 1px solid hotpink;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h1>AI API 목록</h1>
+      <a href="/">광고문구추천</a>
+      <a href="/chat">친구같은챗봇</a>
+      <a href="/chatinfo">정보성챗봇</a>
+      <a href="/translate">번역</a>
+      <a href="/summarize">요약</a>
+      <a href="/audio">음성채팅</a>
+    </nav>
+  </header>
+
+  <h2>친구 같은 챗봇 서비스</h2>
+  <form id="chat" action="http://localhost:3000/chat" method="post">
+    <label>
+      <span>채팅</span>
+      <input type="text" id="message" name="message">
+    </label>
+    <button type="submit">채팅하기</button>
+  </form>
+  <div class="chat-box"></div>
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    //** 친구 같은 챗봇 시작
+    const chatform = document.querySelector('#chat');
+    chatform.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const target = document.querySelector('.chat-box')
+
+      const message = document.querySelector('#message').value;
+      const templet = (text) => {
+        return `<div>${text}</div>`;
+      }
+      target.innerHTML += (templet(message))
+      // let formData = $(this).serialize();
+      // formData = decodeURIComponent(formData);
+      // 입력값 가져오기
+      fetch('http://localhost:3000/chat', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      })
+        .then((Response) => Response.json())
+        .then((result) => {
+          console.log(result);
+          target.innerHTML += (templet(result.text))
+
+
+          // console.log(result)
+        });
+    })
+    //** 친구 같은 챗봇 끝
+  </script>
+</body>
+
+</html>

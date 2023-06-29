@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+  <title>Translation Service</title>
+  <style>
+    h1 {
+      margin: 0;
+    }
+    header {
+      width: 100%;
+      padding: 1rem 0;
+    }
+    header nav {
+      display: flex;
+      align-items: center;
+    }
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 30px;
+      font-weight: 700;
+      color: black;
+      transition: 0.5s;
+      margin: 0 2rem;
+      border: 2px solid #000000;
+      text-decoration: none;
+    }
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 16px;
+      color: black;
+      transition: 0.5s;
+    }
+    form {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-content: space-between;
+    }
+
+    form label {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .success {
+      border: 1px solid hotpink;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h1>AI API 목록</h1>
+      <a href="/">광고문구추천</a>
+      <a href="/chat">친구같은챗봇</a>
+      <a href="/chatinfo">정보성챗봇</a>
+      <a href="/translate">번역</a>
+      <a href="/summarize">요약</a>
+      <a href="/audio">음성채팅</a>
+    </nav>
+  </header>
+
+  <h1>콘텐츠검색광고 문구 추천 서비스</h1>
+  <p>광고문구에 대한 내용을 입력하세요</p>
+  <form id="create_ad_slogan" action="http://localhost:3000/create_ad_slogan" method="post">
+    <label>
+      <span>광고할 제품명</span>
+      <input type="text" id="product" name="product">
+    </label>
+    <label>
+      <span>주요 내용</span>
+      <input type="text" id="content" name="content">
+    </label>
+    <label>
+      <span>광고 문구 스타일</span>
+      <input type="text" id="ton" name="ton">
+    </label>
+    <button type="submit">문구 생성</button>
+  </form>
+  <div class="success"></div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    //** 광고 문구 시작
+    const form = document.querySelector('#create_ad_slogan');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      console.log(e);
+      const product = document.querySelector('#product').value;
+      const content = document.querySelector('#content').value;
+      const ton = document.querySelector('#ton').value;
+      // let formData = $(this).serialize();
+      // formData = decodeURIComponent(formData);
+      // 입력값 가져오기
+      fetch('http://localhost:3000/create_ad_slogan', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ product, content, ton }),
+      })
+        .then((Response) => Response.json())
+        .then((result) => {
+          const target = document.querySelector('.success')
+          target.innerHTML = result.translatedText;
+          // console.log(result)
+        });
+
+    });
+    //** 광고 문구 끝
+  </script>
+</body>
+
+</html>

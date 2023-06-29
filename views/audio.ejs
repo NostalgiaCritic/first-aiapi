@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Recording</title>
+    <style>
+      h1 {
+      margin: 0;
+    }
+    header {
+      width: 100%;
+      padding: 1rem 0;
+    }
+    header nav {
+      display: flex;
+      align-items: center;
+    }
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 30px;
+      font-weight: 700;
+      color: black;
+      transition: 0.5s;
+      margin: 0 2rem;
+      border: 2px solid #000000;
+      text-decoration: none;
+    }
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 16px;
+      color: black;
+      transition: 0.5s;
+    }
+    form {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-content: space-between;
+    }
+
+    form label {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .success {
+      border: 1px solid hotpink;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>AI API 목록</h1>
+      <a href="/">광고문구추천</a>
+      <a href="/chat">친구같은챗봇</a>
+      <a href="/chatinfo">정보성챗봇</a>
+      <a href="/translate">번역</a>
+      <a href="/summarize">요약</a>
+      <a href="/audio">음성채팅</a>
+    </nav>
+  </header>
+
+  <h2>음성 채팅 미구현 상태입니다. 오류 해결 후 다시 올리겠습니다.</h2>
+<button id="startButton">Start Recording</button>
+<button id="stopButton">Stop Recording</button>
+<audio id="audioPlayer" controls></audio>
+<button id="playButton">Play Recorded Audio</button>
+
+<script>
+  // 마이크 접근을 위한 브라우저 지원 여부 체크
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('This browser does not support microphone access.');
+  }
+
+  let mediaRecorder;
+  let chunks = [];
+  let recordedAudioBlob;
+
+  const startRecording = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+
+    mediaRecorder.addEventListener('dataavailable', (event) => {
+      chunks.push(event.data);
+    });
+
+    mediaRecorder.addEventListener('stop', () => {
+      recordedAudioBlob = new Blob(chunks, { type: 'audio/wav' });
+      const audioUrl = URL.createObjectURL(recordedAudioBlob);
+      document.getElementById('audioPlayer').src = audioUrl;
+
+      // 오디오 데이터를 서버로 전송
+      sendAudioDataToBackend(recordedAudioBlob);
+    });
+
+    mediaRecorder.start();
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+      chunks = [];
+    }
+  };
+
+  const playRecordedAudio = () => {
+    if (recordedAudioBlob) {
+      const audioUrl = URL.createObjectURL(recordedAudioBlob);
+      const audioPlayer = document.getElementById('audioPlayer');
+      audioPlayer.src = audioUrl;
+      audioPlayer.play();
+    }
+  };
+
+  const sendAudioDataToBackend = (audioBlob) => {
+    const audioFile = new File([audioBlob], "recorded.wav", { type: 'audio/wav' }); // audioBlob을 File로 변환
+    const formData = new FormData();
+    formData.append('audioData', audioFile);
+
+    fetch('http://localhost:3000/audio', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Chat response:', data.text);
+        // 서버로부터 받은 대화 결과를 처리하는 로직을 추가하세요
+      })
+      .catch((error) => {
+        console.error('Failed to send audio data to backend:', error);
+      });
+  };
+
+  // 버튼 클릭 이벤트 핸들러 등록
+  document.getElementById('startButton').addEventListener('click', startRecording);
+  document.getElementById('stopButton').addEventListener('click', stopRecording);
+  document.getElementById('playButton').addEventListener('click', playRecordedAudio);
+</script>
+</body>
+</html>

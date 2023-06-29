@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+  <title>Translation Service</title>
+  <style>
+    h1 {
+      margin: 0;
+    }
+
+    header {
+      width: 100%;
+      padding: 1rem 0;
+    }
+
+    header nav {
+      display: flex;
+      align-items: center;
+    }
+
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 30px;
+      font-weight: 700;
+      color: black;
+      transition: 0.5s;
+      margin: 0 2rem;
+      border: 2px solid #000000;
+      text-decoration: none;
+    }
+
+    header nav a {
+      display: inline-block;
+      padding: 1rem;
+      font-size: 16px;
+      color: black;
+      transition: 0.5s;
+    }
+
+    form {
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-content: space-between;
+    }
+
+    form label {
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .success {
+      border: 1px solid hotpink;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h1>AI API 목록</h1>
+      <a href="/">광고문구추천</a>
+      <a href="/chat">친구같은챗봇</a>
+      <a href="/chatinfo">정보성챗봇</a>
+      <a href="/translate">번역</a>
+      <a href="/summarize">요약</a>
+      <a href="/audio">음성채팅</a>
+    </nav>
+  </header>
+
+  <h2>번역 서비스</h2>
+  <p>번역할 텍스를 입력하세요</p>
+  <form id="translate-form" action="http://localhost:3000/translate" method="post">
+    <textarea type="text" id="text" name="text" required rows="10"></textarea>
+    <select name="from" id="from">
+      <option value="">원본 언어</option>
+      <option value="한국어">한국어</option>
+      <option value="영어">영어</option>
+      <option value="일본어">일본어</option>
+    </select>
+    <select name="to" id="to">
+      <option value="">받을 언어</option>
+      <option value="한국어">한국어</option>
+      <option value="영어">영어</option>
+      <option value="일본어">일본어</option>
+    </select>
+    <button type="submit">번역</button>
+  </form>
+  <div class="success"></div>
+  <div id="result"></div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    //** 번역 시작
+    const form = document.querySelector('#translate-form');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        console.log(e);
+        const name = document.querySelector('#text').value;
+        const from = document.querySelector('#from').value;
+        const to = document.querySelector('#to').value;
+        // let formData = $(this).serialize();
+        // formData = decodeURIComponent(formData);
+        // 입력값 가져오기
+        fetch('http://localhost:3000/translate', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({ text: name, from, to }),
+        })
+          .then((Response) => Response.json())
+          .then((result) => {
+            const target = document.querySelector('.success')
+            target.innerHTML = result.translatedText;
+            // console.log(result)
+          });
+        
+        // $.post('/translate', { text }, function (data) {
+        //   $('#result').text(data.translatedText);
+        // });
+      });
+
+    //** 번역 끝
+  </script>
+</body>
+
+</html>
