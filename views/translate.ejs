@@ -74,7 +74,7 @@
 
   <h2>번역 서비스</h2>
   <p>번역할 텍스를 입력하세요</p>
-  <form id="translate-form" action="http://localhost:3000/translate" method="post">
+  <form id="translate-form" action="https://port-0-first-aiapi-7xwyjq992lljh77hvc.sel4.cloudtype.app/translate" method="post">
     <textarea type="text" id="text" name="text" required rows="10"></textarea>
     <select name="from" id="from">
       <option value="">원본 언어</option>
@@ -106,7 +106,7 @@
         // let formData = $(this).serialize();
         // formData = decodeURIComponent(formData);
         // 입력값 가져오기
-        fetch('http://localhost:3000/translate', {
+        fetch('https://port-0-first-aiapi-7xwyjq992lljh77hvc.sel4.cloudtype.app/translate', {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
