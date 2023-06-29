@@ -69,7 +69,7 @@
 
   <h1>콘텐츠검색광고 문구 추천 서비스</h1>
   <p>광고문구에 대한 내용을 입력하세요</p>
-  <form id="create_ad_slogan" action="http://localhost:3000/create_ad_slogan" method="post">
+  <form id="create_ad_slogan" action="https://port-0-first-aiapi-7xwyjq992lljh77hvc.sel4.cloudtype.app/create_ad_slogan" method="post">
     <label>
       <span>광고할 제품명</span>
       <input type="text" id="product" name="product">
@@ -99,7 +99,7 @@
       // let formData = $(this).serialize();
       // formData = decodeURIComponent(formData);
       // 입력값 가져오기
-      fetch('http://localhost:3000/create_ad_slogan', {
+      fetch('https://port-0-first-aiapi-7xwyjq992lljh77hvc.sel4.cloudtype.app/create_ad_slogan', {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
