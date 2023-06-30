@@ -4,7 +4,7 @@ const fs = require('fs');
 const multer = require('multer');
 const {Configuration, OpenAIApi} = require('openai');
 const configuration = new Configuration({
-  apiKey: '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',
+  apiKey: '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',
 });
 const app = express();
 var cors = require('cors')
