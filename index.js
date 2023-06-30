@@ -7,12 +7,14 @@ const configuration = new Configuration({
   apiKey: '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',
 });
 const app = express();
+var cors = require('cors')
 const openai = new OpenAIApi(configuration);
 const upload = multer({dest: 'uploads/'});
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
+app.use(cors())
 
 //** get 뷰파일 불러오기 */
 app.get('/', (req, res) => {
