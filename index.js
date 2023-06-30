@@ -88,7 +88,7 @@ app.post('/chat', async (req, res) => {
     res.json({text: reply});
   } catch (error) {
     console.error('ChatGPT 요청 중 오류 발생:', error);
-    res.status(500).json({error: 'ChatGPT 요청 중 오류가 발생했습니다.'});
+    res.status(500).json({error: 'ChatGPT 요청 중 오류가 발생했습니다.'+ error});
   }
 });
 
